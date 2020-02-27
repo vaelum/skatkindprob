@@ -42,14 +42,19 @@ bool HandTree::isValidHand(Hand &hand) {
 
 std::vector<Hand> HandTree::getAllHands(std::vector<Hand> &dealedHands) {
   std::vector<Hand> retHands;
-  this->getAllHandsRec(mainLeaf, dealedHands, retHands);
+  this->getAllHandsRec(mainLeaf->children[0], dealedHands, retHands);
+  this->getAllHandsRec(mainLeaf->children[1], dealedHands, retHands);
+  this->getAllHandsRec(mainLeaf->children[2], dealedHands, retHands);
+  this->getAllHandsRec(mainLeaf->children[3], dealedHands, retHands);
+  this->getAllHandsRec(mainLeaf->children[4], dealedHands, retHands);
   return retHands;
 }
 
 void HandTree::getAllHandsRec(std::shared_ptr<Leaf> &leaf,
                               std::vector<Hand> &dealedHands,
                               std::vector<Hand> &retHands) {
-  if (this->areCompatibleHands(dealedHands, leaf->hand)) {
+  if (this->areCompatibleHandsIncremental(dealedHands, leaf->hand,
+                                          leaf->depth - 1)) {
     if (leaf->depth == 8) {
 
       retHands.push_back(leaf->hand);
@@ -63,17 +68,15 @@ void HandTree::getAllHandsRec(std::shared_ptr<Leaf> &leaf,
   }
 }
 
-bool HandTree::areCompatibleHands(std::vector<Hand> &hands, Hand &h) {
-
-  for (unsigned int i = 0; i < 8; i++) {
-    unsigned int sum = 0;
-    for (unsigned int k = 0; k < hands.size(); k++) {
-      sum += hands.at(k).symbol[i];
-    }
-    sum += h.symbol[i];
-    if (sum > 4) {
-      return false;
-    }
+bool HandTree::areCompatibleHandsIncremental(std::vector<Hand> &hands, Hand &h,
+                                             unsigned int depth) {
+  unsigned int sum = 0;
+  for (unsigned int k = 0; k < hands.size(); k++) {
+    sum += hands.at(k).symbol[depth];
+  }
+  sum += h.symbol[depth];
+  if (sum > 4) {
+    return false;
   }
   return true;
 }

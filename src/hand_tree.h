@@ -56,8 +56,10 @@ private:
   // checks if hand has <=10 cards
   bool isValidHand(Hand &hand);
 
-  // checks if multiple hands are compatible with each other
-  bool areCompatibleHands(std::vector<Hand> &hands, Hand &h);
+  // checks if multiple hands are incrementally compatible with each other (only
+  // compares symbol[depth])
+  bool areCompatibleHandsIncremental(std::vector<Hand> &hands, Hand &h,
+                                     unsigned int depth);
 
   // recursive helper function for getAllHands()
   void getAllHandsRec(std::shared_ptr<Leaf> &leaf,
