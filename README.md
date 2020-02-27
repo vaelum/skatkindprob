@@ -9,8 +9,8 @@ To build this repository you need:
 * gmp library (https://gmplib.org)
 
 ```
-git clone 
-cd skatkinbdprob
+git clone git@github.com:inversitas/skatkindprob.git
+cd skatkindprob
 mkdir build
 cd build
 cmake ..
