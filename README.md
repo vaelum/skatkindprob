@@ -15,7 +15,7 @@ mkdir build
 cd build
 cmake ..
 make
-./skb -s -p
+./skb --help
 ```
 
 
