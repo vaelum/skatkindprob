@@ -4,7 +4,9 @@ Computational proof calculating the probabilites for 0 to 8 three of a kind in a
 
 ## Build & Run
 
-To build this repository you need cmake >= 2.8.9 and g++ with support for c++17 (any other c++17 compiler that works with cmake will probably work to).
+To build this repository you need:
+* cmake with support for c++17
+* gmp library (https://gmplib.org)
 
 ```
 git clone 
