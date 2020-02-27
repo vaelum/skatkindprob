@@ -1,28 +1,27 @@
 #ifndef SIMULATION_H
 #define SIMULATION_H
+#include "io.h"
+#include <algorithm>
 #include <iostream>
 #include <random>
 #include <string>
 
 class Simulation {
- public:
-  Simulation(unsigned long rounds);
+public:
+  Simulation();
   ~Simulation();
 
- private:
+  void run(unsigned long rounds);
+
+private:
   void givehands();
   void analysehands();
-  void sorthands();
 
-  void deletehands();
-
-  void status();
-  void progressbar(float progress);
-
-  short hands[3][10];
+  std::array<std::array<unsigned char, 10>, 3> hands;
+  unsigned int cards[32];
   unsigned long long games;
-  long drprot[8];
+  std::array<unsigned long, 9> nKindProt;
   std::mt19937 generator;
 };
 
-#endif  // SIMULATION_H
+#endif // SIMULATION_H
