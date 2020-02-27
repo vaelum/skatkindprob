@@ -24,7 +24,7 @@ struct Hand {
   }
 };
 
-// HandTree is a tree data structure using Leaf as Nodes.
+// HandTree is a tree data structure using Leaf as nodes.
 // HandTree contains all allowed hands (subsets of the 32 cards)
 // in Skat (a hand in skat always has 10 cards)
 
