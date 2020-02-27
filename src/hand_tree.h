@@ -8,7 +8,7 @@
 #include <vector>
 
 struct Hand {
-  unsigned char symbol[8];
+  unsigned int symbol[8];
   Hand() {
     symbol[0] = 0;
     symbol[1] = 0;
@@ -24,9 +24,9 @@ struct Hand {
 struct Leaf {
   std::array<std::shared_ptr<Leaf>, 5> children;
   std::shared_ptr<Leaf> parent;
-  unsigned char depth;
+  unsigned int depth;
   Hand hand;
-  Leaf(std::shared_ptr<Leaf> parent, unsigned char depth, Hand hand) {
+  Leaf(std::shared_ptr<Leaf> parent, unsigned int depth, Hand hand) {
     this->parent = parent;
     this->depth = depth;
     this->hand = hand;
@@ -41,10 +41,10 @@ public:
   std::vector<Hand> getAllHands(std::vector<Hand> &dealedHands);
 
 private:
-  void populate(std::shared_ptr<Leaf> leaf, Hand hand, unsigned char depth);
+  void populate(std::shared_ptr<Leaf> leaf, Hand hand, unsigned int depth);
   bool isValidHand(Hand &hand);
-  bool areCompatibleHands(std::vector<Hand> &hands);
-  void getAllHandsRec(std::shared_ptr<Leaf> leaf,
+  bool areCompatibleHands(std::vector<Hand> &hands, Hand &h);
+  void getAllHandsRec(std::shared_ptr<Leaf> &leaf,
                       std::vector<Hand> &dealedHands,
                       std::vector<Hand> &retHands);
 

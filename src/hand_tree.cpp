@@ -10,18 +10,18 @@ HandTree::HandTree() {
 HandTree::~HandTree() {}
 
 void HandTree::populate(std::shared_ptr<Leaf> leaf, Hand hand,
-                        unsigned char depth) {
+                        unsigned int depth) {
   // remove after verifying no longer needed
   if (depth > 7) {
     std::cout << "SOMETHING WENT WRONG!!! No. 1" << std::endl;
     return;
   }
 
-  for (unsigned char i = 0; i < 5; i++) {
+  for (unsigned int i = 0; i < 5; i++) {
     hand.symbol[depth] = i;
     if (this->isValidHand(hand)) {
       if (depth + 1 == 8) {
-        unsigned char sum = 0;
+        unsigned int sum = 0;
         for (auto v : hand.symbol) {
           sum += v;
         }
@@ -39,7 +39,7 @@ void HandTree::populate(std::shared_ptr<Leaf> leaf, Hand hand,
 }
 
 bool HandTree::isValidHand(Hand &hand) {
-  unsigned char sum = 0;
+  unsigned int sum = 0;
   for (auto v : hand.symbol) {
     sum += v;
   }
@@ -52,19 +52,16 @@ std::vector<Hand> HandTree::getAllHands(std::vector<Hand> &dealedHands) {
   return retHands;
 }
 
-void HandTree::getAllHandsRec(std::shared_ptr<Leaf> leaf,
+void HandTree::getAllHandsRec(std::shared_ptr<Leaf> &leaf,
                               std::vector<Hand> &dealedHands,
                               std::vector<Hand> &retHands) {
-
-  std::vector<Hand> checkHands(dealedHands);
-  checkHands.push_back(leaf->hand);
-
-  if (this->areCompatibleHands(checkHands)) {
+  if (this->areCompatibleHands(dealedHands, leaf->hand)) {
     if (leaf->depth == 8) {
+
       retHands.push_back(leaf->hand);
       return;
     }
-    for (unsigned char i = 0; i < 5; i++) {
+    for (unsigned int i = 0; i < 5; i++) {
       if (leaf->children[i] != nullptr) {
         this->getAllHandsRec(leaf->children[i], dealedHands, retHands);
       }
@@ -72,12 +69,14 @@ void HandTree::getAllHandsRec(std::shared_ptr<Leaf> leaf,
   }
 }
 
-bool HandTree::areCompatibleHands(std::vector<Hand> &hands) {
-  for (unsigned char i = 0; i < 8; i++) {
-    unsigned char sum = 0;
-    for (auto h : hands) {
-      sum += h.symbol[i];
+bool HandTree::areCompatibleHands(std::vector<Hand> &hands, Hand &h) {
+
+  for (unsigned int i = 0; i < 8; i++) {
+    unsigned int sum = 0;
+    for (unsigned int k = 0; k < hands.size(); k++) {
+      sum += hands.at(k).symbol[i];
     }
+    sum += h.symbol[i];
     if (sum > 4) {
       return false;
     }
