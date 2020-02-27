@@ -14,13 +14,15 @@ void Proof::compute(unsigned int numberOfThreads) {
   std::cout << "Running proof with " << numberOfThreads << " threads..."
             << std::endl;
   HandTree htree;
-  mpz_class n3KindOccurrences[9];
+  mpz_class n3KindOccurrences[9]; // counts number of combinations with 0 - 8
+                                  // three of a kind occurences
   std::fill(n3KindOccurrences, n3KindOccurrences + 9, 0);
-  mpz_class nGames = 0;
+  mpz_class nGames = 0; // counts total games
 
   std::vector emptyHandVector = std::vector<Hand>();
   auto p1Hands = htree.getAllHands(emptyHandVector);
 
+  // split the possible hands for the first player to be passed to the threads
   std::vector<std::vector<Hand>> p1HandsPart;
   unsigned int counter;
   unsigned long size = 36;
@@ -33,6 +35,7 @@ void Proof::compute(unsigned int numberOfThreads) {
         std::vector<Hand>(begin(p1Hands) + counter, end(p1Hands)));
   }
 
+  // run threads
   unsigned int progress = 0;
   io::progressbar(0);
   std::vector<std::future<std::array<mpz_class, 10>>> fut;
@@ -62,6 +65,7 @@ void Proof::compute(unsigned int numberOfThreads) {
     nGames += ret[9];
   }
 
+  // output results
   io::progressbar(1.0);
   std::cout << std::endl;
   for (int i = 0; i < 9; i++) {
