@@ -11,12 +11,6 @@ HandTree::~HandTree() {}
 
 void HandTree::populate(std::shared_ptr<Leaf> leaf, Hand hand,
                         unsigned int depth) {
-  // remove after verifying no longer needed
-  if (depth > 7) {
-    std::cout << "SOMETHING WENT WRONG!!! No. 1" << std::endl;
-    return;
-  }
-
   for (unsigned int i = 0; i < 5; i++) {
     hand.symbol[depth] = i;
     if (this->isValidHand(hand)) {
