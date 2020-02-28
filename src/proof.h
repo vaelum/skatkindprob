@@ -2,6 +2,7 @@
 #define PROOF_H
 #include "hand_tree.h"
 #include "io.h"
+#include <atomic>
 #include <future>
 #include <gmpxx.h>
 #include <iostream>
@@ -37,6 +38,8 @@ private:
 
   // binominal coefficient look up table
   std::array<std::vector<unsigned long>, 5> bncLookup;
+
+  std::atomic<unsigned int> progress;
 };
 
 #endif // PROOF_H

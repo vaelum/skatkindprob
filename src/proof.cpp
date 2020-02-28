@@ -25,7 +25,7 @@ void Proof::compute(unsigned int numberOfThreads) {
   // split the possible hands for the first player to be passed to the threads
   std::vector<std::vector<Hand>> p1HandsPart;
   unsigned int counter;
-  unsigned long size = 80;
+  unsigned long size = p1Hands.size() / numberOfThreads;
   for (counter = 0; counter + size < p1Hands.size(); counter += size) {
     p1HandsPart.push_back(std::vector<Hand>(begin(p1Hands) + counter,
                                             begin(p1Hands) + counter + size));
@@ -36,24 +36,25 @@ void Proof::compute(unsigned int numberOfThreads) {
   }
 
   // run threads
-  unsigned int progress = 0;
+  std::atomic_store(&progress, 0);
   io::progressbar(0);
   std::vector<std::future<std::array<mpz_class, 10>>> fut;
   for (auto part : p1HandsPart) {
     fut.push_back(
         std::async(std::launch::async, &Proof::computeThread, this, part));
+  }
 
-    if (fut.size() == numberOfThreads) {
-      for (unsigned int i = 0; i < fut.size(); i++) {
-        std::array<mpz_class, 10> ret = fut.at(i).get();
-        for (unsigned int k = 0; k < 9; k++) {
-          n3KindOccurrences[k] += ret[k];
-        }
-        nGames += ret[9];
+  bool threadsReady = false;
+  while (!threadsReady) {
+    for (unsigned int i = 0; i < fut.size(); i++) {
+      io::progressbar((float)std::atomic_load(&progress) /
+                      (float)p1Hands.size());
+      std::chrono::system_clock::time_point time_passed =
+          std::chrono::system_clock::now() + std::chrono::microseconds(300000);
+      if (fut.at(i).wait_until(time_passed) != std::future_status::ready) {
+        break;
       }
-      progress += numberOfThreads * size;
-      io::progressbar((float)progress / (float)p1Hands.size());
-      fut.clear();
+      threadsReady = true;
     }
   }
 
@@ -86,7 +87,12 @@ std::array<mpz_class, 10> Proof::computeThread(std::vector<Hand> p1HandsPart) {
 
   std::fill(ret.begin(), ret.end(), 0);
 
+  unsigned int counter = 0;
   for (auto p1h : p1HandsPart) {
+    counter++;
+    if (counter % 10 == 0)
+      std::atomic_fetch_add(&this->progress, 10);
+
     p1Hand = std::vector<Hand>({p1h});
     std::vector<Hand> p2Hands = htree.getAllHands(p1Hand);
 
