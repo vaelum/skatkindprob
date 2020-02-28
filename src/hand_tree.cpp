@@ -14,13 +14,10 @@ void HandTree::populate(std::shared_ptr<Leaf> leaf, Hand hand,
                         unsigned int depth) {
   for (unsigned int i = 0; i < 5; i++) {
     hand[depth] = i;
-    if (std::accumulate(begin(hand), end(hand), 0) <= 10) {
+    unsigned int handCards = std::accumulate(begin(hand), end(hand), 0);
+    if (handCards <= 10) {
       if (depth + 1 == 8) {
-        unsigned int sum = 0;
-        for (auto v : hand) {
-          sum += v;
-        }
-        if (sum == 10) {
+        if (handCards == 10) {
           leaf->children.push_back(
               std::make_shared<Leaf>(leaf, depth + 1, hand));
         }
@@ -58,8 +55,8 @@ void HandTree::getAllHandsRec(std::shared_ptr<Leaf> &leaf,
       retHands.push_back(leaf->hand);
       return;
     }
-    for (unsigned int i = 0; i < leaf->children.size(); i++) {
-      this->getAllHandsRec(leaf->children[i], dealedHands, retHands);
+    for (auto &c : leaf->children) {
+      this->getAllHandsRec(c, dealedHands, retHands);
     }
   }
 }
