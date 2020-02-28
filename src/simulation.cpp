@@ -32,8 +32,6 @@ void Simulation::run(unsigned long rounds) {
               << double(nKindProt[i]) / double(games) * 100.0 << "%"
               << std::endl;
   }
-  std::cout << std::endl;
-  std::cout << std::endl;
 }
 
 void Simulation::givehands() {

@@ -73,8 +73,6 @@ void Proof::compute(unsigned int numberOfThreads) {
               << (mpf_class)(n3KindOccurrences[i] * 100) / (mpf_class)nGames
               << "%" << std::endl;
   }
-  std::cout << std::endl;
-  std::cout << std::endl;
 }
 
 std::array<mpz_class, 10> Proof::computeThread(std::vector<Hand> p1HandsPart) {
