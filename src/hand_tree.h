@@ -8,21 +8,9 @@
 #include <vector>
 
 // data structure representing a subsets of the 32 skat cards.
-// symbol[n] can have values from 0 - 4 representing how many cards of a.e.
-// "symbol" king are in a subset
-struct Hand {
-  unsigned int symbol[8];
-  Hand() {
-    symbol[0] = 0;
-    symbol[1] = 0;
-    symbol[2] = 0;
-    symbol[3] = 0;
-    symbol[4] = 0;
-    symbol[5] = 0;
-    symbol[6] = 0;
-    symbol[7] = 0;
-  }
-};
+// Hand[n] can have values from 0 - 4 representing how many cards of a.e.
+// symbol king are in a subset
+typedef std::array<unsigned int, 8> Hand;
 
 // HandTree is a tree data structure using Leaf as nodes.
 // HandTree contains all allowed hands (subsets of the 32 cards)
@@ -57,7 +45,7 @@ private:
   bool isValidHand(Hand &hand);
 
   // checks if multiple hands are incrementally compatible with each other (only
-  // compares symbol[depth])
+  // compares Hand[depth])
   bool areCompatibleHandsIncremental(std::vector<Hand> &hands, Hand &h,
                                      unsigned int depth);
 

@@ -2,6 +2,7 @@
 
 HandTree::HandTree() {
   Hand hand;
+  std::fill(begin(hand), end(hand), 0);
   mainLeaf = std::make_shared<Leaf>(nullptr, 0, hand);
 
   this->populate(mainLeaf, hand, 0);
@@ -12,11 +13,11 @@ HandTree::~HandTree() {}
 void HandTree::populate(std::shared_ptr<Leaf> leaf, Hand hand,
                         unsigned int depth) {
   for (unsigned int i = 0; i < 5; i++) {
-    hand.symbol[depth] = i;
+    hand[depth] = i;
     if (this->isValidHand(hand)) {
       if (depth + 1 == 8) {
         unsigned int sum = 0;
-        for (auto v : hand.symbol) {
+        for (auto v : hand) {
           sum += v;
         }
         if (sum == 10) {
@@ -34,7 +35,7 @@ void HandTree::populate(std::shared_ptr<Leaf> leaf, Hand hand,
 
 bool HandTree::isValidHand(Hand &hand) {
   unsigned int sum = 0;
-  for (auto v : hand.symbol) {
+  for (auto v : hand) {
     sum += v;
   }
   return sum <= 10 ? true : false;
@@ -72,9 +73,9 @@ bool HandTree::areCompatibleHandsIncremental(std::vector<Hand> &hands, Hand &h,
                                              unsigned int depth) {
   unsigned int sum = 0;
   for (unsigned int k = 0; k < hands.size(); k++) {
-    sum += hands.at(k).symbol[depth];
+    sum += hands.at(k)[depth];
   }
-  sum += h.symbol[depth];
+  sum += h[depth];
   if (sum > 4) {
     return false;
   }
