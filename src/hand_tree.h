@@ -18,7 +18,7 @@ typedef std::array<unsigned int, 8> Hand;
 // in Skat (a hand in skat always has 10 cards)
 
 struct Leaf {
-  std::array<std::shared_ptr<Leaf>, 5> children;
+  std::vector<std::shared_ptr<Leaf>> children;
   std::shared_ptr<Leaf> parent;
   unsigned int depth;
   Hand hand;

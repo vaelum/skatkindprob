@@ -21,14 +21,13 @@ void HandTree::populate(std::shared_ptr<Leaf> leaf, Hand hand,
           sum += v;
         }
         if (sum == 10) {
-          leaf->children[i] = std::make_shared<Leaf>(leaf, depth + 1, hand);
+          leaf->children.push_back(
+              std::make_shared<Leaf>(leaf, depth + 1, hand));
         }
       } else {
-        leaf->children[i] = std::make_shared<Leaf>(leaf, depth + 1, hand);
-        this->populate(leaf->children[i], hand, depth + 1);
+        leaf->children.push_back(std::make_shared<Leaf>(leaf, depth + 1, hand));
+        this->populate(leaf->children.back(), hand, depth + 1);
       }
-    } else {
-      leaf->children[i] = nullptr;
     }
   }
 }
@@ -59,10 +58,8 @@ void HandTree::getAllHandsRec(std::shared_ptr<Leaf> &leaf,
       retHands.push_back(leaf->hand);
       return;
     }
-    for (unsigned int i = 0; i < 5; i++) {
-      if (leaf->children[i] != nullptr) {
-        this->getAllHandsRec(leaf->children[i], dealedHands, retHands);
-      }
+    for (unsigned int i = 0; i < leaf->children.size(); i++) {
+      this->getAllHandsRec(leaf->children[i], dealedHands, retHands);
     }
   }
 }
