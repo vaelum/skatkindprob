@@ -64,12 +64,30 @@ int main(int argc, char *argv[]) {
     help();
   }
   if (runSimulation) {
+    auto t1 = std::chrono::high_resolution_clock::now();
+
     Simulation sim;
     sim.run(simulationRounds);
+
+    auto t2 = std::chrono::high_resolution_clock::now();
+    auto duration =
+        std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    std::cout << "\nRuntime: " << duration / 1000000.0 << " seconds"
+              << std::endl
+              << std::endl;
   }
   if (runProof) {
+    auto t1 = std::chrono::high_resolution_clock::now();
+
     Proof proof;
     proof.compute(proofThreads);
+
+    auto t2 = std::chrono::high_resolution_clock::now();
+    auto duration =
+        std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    std::cout << "\nRuntime: " << duration / 1000000.0 << " seconds"
+              << std::endl
+              << std::endl;
   }
   return 0;
 }
