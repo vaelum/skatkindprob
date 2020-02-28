@@ -44,6 +44,7 @@ void Proof::compute(unsigned int numberOfThreads) {
         std::async(std::launch::async, &Proof::computeThread, this, part));
   }
 
+  // wait for a all threads to finish while updating the progress bar
   bool threadsReady = false;
   while (!threadsReady) {
     for (unsigned int i = 0; i < fut.size(); i++) {
@@ -58,6 +59,9 @@ void Proof::compute(unsigned int numberOfThreads) {
     }
   }
 
+  io::progressbar((float)std::atomic_load(&progress) / (float)p1Hands.size());
+
+  // get values form threads
   for (unsigned int i = 0; i < fut.size(); i++) {
     std::array<mpz_class, 10> ret = fut.at(i).get();
     for (unsigned int k = 0; k < 9; k++) {
