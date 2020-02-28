@@ -45,8 +45,8 @@ void HandTree::getAllHandsRec(std::shared_ptr<Leaf> &leaf,
   // checks if leaf->hand is still compatible with dealedHands by summing up
   // symbol count at leaf->depth -1
   unsigned int symbolCount = 0;
-  for (unsigned int i = 0; i < dealedHands.size(); i++) {
-    symbolCount += dealedHands.at(i)[leaf->depth - 1];
+  for (auto &dh : dealedHands) {
+    symbolCount += dh[leaf->depth - 1];
   }
   symbolCount += leaf->hand[leaf->depth - 1];
   // actuall check
