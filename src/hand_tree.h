@@ -3,6 +3,7 @@
 #include <array>
 #include <iostream>
 #include <memory>
+#include <numeric>
 #include <random>
 #include <string>
 #include <vector>
@@ -40,14 +41,6 @@ public:
 private:
   // creates the tree structure
   void populate(std::shared_ptr<Leaf> leaf, Hand hand, unsigned int depth);
-
-  // checks if hand has <=10 cards
-  bool isValidHand(Hand &hand);
-
-  // checks if multiple hands are incrementally compatible with each other (only
-  // compares Hand[depth])
-  bool areCompatibleHandsIncremental(std::vector<Hand> &hands, Hand &h,
-                                     unsigned int depth);
 
   // recursive helper function for getAllHands()
   void getAllHandsRec(std::shared_ptr<Leaf> &leaf,

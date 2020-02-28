@@ -14,7 +14,7 @@ void HandTree::populate(std::shared_ptr<Leaf> leaf, Hand hand,
                         unsigned int depth) {
   for (unsigned int i = 0; i < 5; i++) {
     hand[depth] = i;
-    if (this->isValidHand(hand)) {
+    if (std::accumulate(begin(hand), end(hand), 0) <= 10) {
       if (depth + 1 == 8) {
         unsigned int sum = 0;
         for (auto v : hand) {
@@ -33,14 +33,6 @@ void HandTree::populate(std::shared_ptr<Leaf> leaf, Hand hand,
   }
 }
 
-bool HandTree::isValidHand(Hand &hand) {
-  unsigned int sum = 0;
-  for (auto v : hand) {
-    sum += v;
-  }
-  return sum <= 10 ? true : false;
-}
-
 std::vector<Hand> HandTree::getAllHands(std::vector<Hand> &dealedHands) {
   std::vector<Hand> retHands;
   this->getAllHandsRec(mainLeaf->children[0], dealedHands, retHands);
@@ -54,8 +46,14 @@ std::vector<Hand> HandTree::getAllHands(std::vector<Hand> &dealedHands) {
 void HandTree::getAllHandsRec(std::shared_ptr<Leaf> &leaf,
                               std::vector<Hand> &dealedHands,
                               std::vector<Hand> &retHands) {
-  if (this->areCompatibleHandsIncremental(dealedHands, leaf->hand,
-                                          leaf->depth - 1)) {
+
+  unsigned int sum = 0;
+  for (unsigned int i = 0; i < dealedHands.size(); i++) {
+    sum += dealedHands.at(i)[leaf->depth - 1];
+  }
+  sum += leaf->hand[leaf->depth - 1];
+
+  if (sum <= 4) {
     if (leaf->depth == 8) {
 
       retHands.push_back(leaf->hand);
@@ -67,17 +65,4 @@ void HandTree::getAllHandsRec(std::shared_ptr<Leaf> &leaf,
       }
     }
   }
-}
-
-bool HandTree::areCompatibleHandsIncremental(std::vector<Hand> &hands, Hand &h,
-                                             unsigned int depth) {
-  unsigned int sum = 0;
-  for (unsigned int k = 0; k < hands.size(); k++) {
-    sum += hands.at(k)[depth];
-  }
-  sum += h[depth];
-  if (sum > 4) {
-    return false;
-  }
-  return true;
 }

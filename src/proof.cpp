@@ -25,7 +25,7 @@ void Proof::compute(unsigned int numberOfThreads) {
   // split the possible hands for the first player to be passed to the threads
   std::vector<std::vector<Hand>> p1HandsPart;
   unsigned int counter;
-  unsigned long size = 36;
+  unsigned long size = 80;
   for (counter = 0; counter + size < p1Hands.size(); counter += size) {
     p1HandsPart.push_back(std::vector<Hand>(begin(p1Hands) + counter,
                                             begin(p1Hands) + counter + size));
