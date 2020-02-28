@@ -46,16 +46,16 @@ std::vector<Hand> HandTree::getAllHands(std::vector<Hand> &dealedHands) {
 void HandTree::getAllHandsRec(std::shared_ptr<Leaf> &leaf,
                               std::vector<Hand> &dealedHands,
                               std::vector<Hand> &retHands) {
-
-  unsigned int sum = 0;
+  // checks if leaf->hand is still compatible with dealedHands by summing up
+  // symbol count at leaf->depth -1
+  unsigned int symbolCount = 0;
   for (unsigned int i = 0; i < dealedHands.size(); i++) {
-    sum += dealedHands.at(i)[leaf->depth - 1];
+    symbolCount += dealedHands.at(i)[leaf->depth - 1];
   }
-  sum += leaf->hand[leaf->depth - 1];
-
-  if (sum <= 4) {
+  symbolCount += leaf->hand[leaf->depth - 1];
+  // actuall check
+  if (symbolCount <= 4) {
     if (leaf->depth == 8) {
-
       retHands.push_back(leaf->hand);
       return;
     }
