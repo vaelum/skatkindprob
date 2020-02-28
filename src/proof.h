@@ -28,10 +28,10 @@ public:
 private:
   // returns "multiplicity" of hand combination
   // (how many real games are represented by hand combination)
-  unsigned long calcMultiplicity(Hand &p1, Hand &p2, Hand &p3);
+  unsigned long calcMultiplicity(Hand &p1h, Hand &p2h, Hand &p3h);
 
   // returns number of three of a kind in hands p1,p2,p3
-  unsigned long calcN3Kind(Hand &p1, Hand &p2, Hand &p3);
+  unsigned long calcN3Kind(Hand &p1h, Hand &p2h, Hand &p3h);
 
   // to improve performance the computation is multithreaded
   std::array<mpz_class, 10> computeThread(std::vector<Hand> p1HandsPart);

@@ -111,36 +111,36 @@ std::array<mpz_class, 10> Proof::computeThread(std::vector<Hand> p1HandsPart) {
   return ret;
 }
 
-unsigned long Proof::calcN3Kind(Hand &p1, Hand &p2, Hand &p3) {
+unsigned long Proof::calcN3Kind(Hand &p1h, Hand &p2h, Hand &p3h) {
   unsigned long n3Kind = 0;
   for (unsigned int i = 0; i < 8; i++) {
-    if (p1[i] >= 3)
+    if (p1h[i] >= 3)
       n3Kind++;
-    if (p2[i] >= 3)
+    if (p2h[i] >= 3)
       n3Kind++;
-    if (p3[i] >= 3)
+    if (p3h[i] >= 3)
       n3Kind++;
   }
 
   return n3Kind;
 }
 
-unsigned long Proof::calcMultiplicity(Hand &p1, Hand &p2, Hand &p3) {
+unsigned long Proof::calcMultiplicity(Hand &p1h, Hand &p2h, Hand &p3h) {
   Hand left;
   std::fill(begin(left), end(left), 4);
 
   unsigned long mp = 1;
   for (unsigned int i = 0; i < 8; i++) {
-    mp *= bncLookup[left[i]][p1[i]];
-    left[i] -= p1[i];
+    mp *= bncLookup[left[i]][p1h[i]];
+    left[i] -= p1h[i];
   }
   for (unsigned int i = 0; i < 8; i++) {
-    mp *= bncLookup[left[i]][p2[i]];
-    left[i] -= p2[i];
+    mp *= bncLookup[left[i]][p2h[i]];
+    left[i] -= p2h[i];
   }
   for (unsigned int i = 0; i < 8; i++) {
-    mp *= bncLookup[left[i]][p3[i]];
-    left[i] -= p3[i];
+    mp *= bncLookup[left[i]][p3h[i]];
+    left[i] -= p3h[i];
   }
   for (unsigned int i = 0; i < 8; i++) {
     mp *= bncLookup[left[i]][left[i]];
