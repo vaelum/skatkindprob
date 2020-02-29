@@ -18,14 +18,16 @@ typedef std::array<unsigned int, 8> Hand;
 // in Skat (a hand in skat always has 10 cards)
 
 struct Leaf {
-  std::vector<std::shared_ptr<Leaf>> children;
-  std::shared_ptr<Leaf> parent;
+  std::vector<Leaf> children;
   unsigned int depth;
   Hand hand;
-  Leaf(std::shared_ptr<Leaf> parent, unsigned int depth, Hand hand) {
-    this->parent = parent;
+  Leaf(unsigned int depth, Hand hand) {
     this->depth = depth;
     this->hand = hand;
+  }
+  Leaf() {
+    this->depth = 0;
+    std::fill(begin(this->hand), end(this->hand), 0);
   }
 };
 
@@ -36,18 +38,17 @@ public:
 
   // Returns all allowed hands in respect to dealedHands.
   // dealedHands can be empty.
-  std::vector<Hand> getAllHands(std::vector<Hand> &dealedHands);
+  void getAllHands(const Hand &sumHands, std::vector<Hand> &compatibleHands);
 
 private:
   // creates the tree structure
-  void populate(std::shared_ptr<Leaf> leaf, Hand hand, unsigned int depth);
+  void populate(Leaf &leaf, Hand hand, unsigned int depth);
 
   // recursive helper function for getAllHands()
-  void getAllHandsRec(std::shared_ptr<Leaf> &leaf,
-                      std::vector<Hand> &dealedHands,
-                      std::vector<Hand> &retHands);
+  void getAllHandsRec(const Leaf &leaf, const Hand &sumHands,
+                      std::vector<Hand> &compatibleHands);
 
-  std::shared_ptr<Leaf> mainLeaf;
+  Leaf mainLeaf;
 };
 
 #endif // HAND_TREE_H
