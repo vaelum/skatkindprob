@@ -1,4 +1,7 @@
 #!/bin/bash
-export CC=/usr/local/bin/gcc
-export CXX=/usr/local/bin/g++
-cmake .
+export CC=/usr/bin/gcc
+export CXX=/usr/bin/g++
+
+mkdir build
+cd build
+cmake ..
