@@ -14,9 +14,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: install_gmp    
-      run: sudo apt-get install libgmp3-dev
-    - name: cmake
-      run: cmake .
+      run: sudo apt-get install libgmp3-dev g++ gcc
+    - name: configure
+      run: ./configure
     - name: make
       run: make
     - name: make check
