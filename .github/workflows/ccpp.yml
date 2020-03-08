@@ -13,10 +13,10 @@ jobs:
     
     steps:
     - uses: actions/checkout@v2
-    - name: install_gmp    
+    - name: install_dependencies    
       run: sudo apt-get install libgmp3-dev g++ gcc
     - name: configure
-      run: sh ./configure
+      run: sh ./configure && cat /usr/bin | grep g++
     - name: make
       run: cd build && make
     - name: make check
