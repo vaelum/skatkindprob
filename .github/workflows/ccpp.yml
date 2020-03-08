@@ -16,7 +16,7 @@ jobs:
     - name: install_gmp    
       run: sudo apt-get install libgmp3-dev g++ gcc
     - name: configure
-      run: ./configure
+      run: sh ./configure
     - name: make
       run: make
     - name: make check
