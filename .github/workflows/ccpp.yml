@@ -16,7 +16,7 @@ jobs:
     - name: install_dependencies    
       run: sudo apt-get install libgmp3-dev g++ gcc
     - name: configure
-      run: sh ./configure && alias g++='/usr/bin/g++-9' && whereis g++
+      run: sh ./configure && sudo rm /usr/bin/g++ && sudo mv /usr/bin/g++-9 /usr/bin/g++
     - name: make
       run: cd build && make
     - name: make check
