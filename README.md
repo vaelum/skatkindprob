@@ -9,7 +9,7 @@ To build this repository you need:
 * gmp library (https://gmplib.org)
 
 The following commands are for linux like operating systems.
-If you are using something else you still should be able to build this project
+If you are using something else you still should be able to build and run this project
 but possibly will need other commands.
 
 ```
