@@ -5,7 +5,7 @@ Computational proof calculating the probabilites for 0 to 8 three of a kind in a
 ## Build & Run
 
 To build this repository you need:
-* cmake and a c++ compiler with support for c++17 and std:atomic
+* cmake and a c++ compiler with support for c++17 and std::atomic
 * gmp library (https://gmplib.org)
 
 The following commands are for linux like operating systems.
