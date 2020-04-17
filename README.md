@@ -10,10 +10,9 @@ To build this repository you need:
 
 The following commands are for linux like operating systems.
 If you are using something else you still should be able to build and run this project
-but possibly will need other commands.
+but will need other commands.
 
 ```
-git clone git@github.com:inversitas/skatkindprob.git
 cd skatkindprob
 mkdir build
 cd build
