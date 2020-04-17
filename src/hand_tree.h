@@ -15,7 +15,7 @@ typedef std::array<unsigned int, 8> Hand;
 
 // HandTree is a tree data structure using Leaf as nodes.
 // HandTree contains all allowed hands (subsets of the 32 cards)
-// in Skat (a hand in skat always has 10 cards)
+// in Skat (a hand in Skat always has 10 cards)
 
 struct Leaf {
   std::vector<Leaf> children;
@@ -31,8 +31,16 @@ struct Leaf {
   }
 };
 
+// HandTree is a tree data structure using Leaf as nodes.
+// HandTree contains all allowed hands for one player
+// (subset of the 32 cards) in Skat (a hand in Skat
+// always has 10 cards). Each level of the tree represents
+// one of the 8 symbols and contains all the partially complete
+// possible hands up to the current level.
+// Every Leaf can have between 1 and 5 children depending on how many
+// cards are already in the hand up to the current level.
 class HandTree {
-public:
+ public:
   HandTree();
   ~HandTree();
 
@@ -40,15 +48,14 @@ public:
   // dealedHands can be empty.
   void getAllHands(const Hand &sumHands, std::vector<Hand> &compatibleHands);
 
-private:
-  // creates the tree structure
+ private:
+  // populates/creates the tree structure
   void populate(Leaf &leaf, Hand hand, unsigned int depth);
 
-  // recursive helper function for getAllHands()
   void getAllHandsRec(const Leaf &leaf, const Hand &sumHands,
                       std::vector<Hand> &compatibleHands);
 
   Leaf mainLeaf;
 };
 
-#endif // HAND_TREE_H
+#endif  // HAND_TREE_H

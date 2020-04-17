@@ -14,14 +14,10 @@ void Proof::compute(unsigned int numberOfThreads) {
   std::cout << "Running proof with " << numberOfThreads << " threads..."
             << std::endl;
   HandTree htree;
-  mpz_class n3KindOccurrences[9]; // counts number of combinations with 0 - 8
-                                  // three of a kind occurences
-  std::fill(n3KindOccurrences, n3KindOccurrences + 9, 0);
-  mpz_class nGames = 0; // counts total games
 
   Hand emptyHand;
   std::fill(begin(emptyHand), end(emptyHand), 0);
-  std::vector<Hand> p1Hands;
+  std::vector<Hand> p1Hands;  // possible hands for player 1
   htree.getAllHands(emptyHand, p1Hands);
 
   // split the possible hands for the first player to be passed to the threads
@@ -63,6 +59,11 @@ void Proof::compute(unsigned int numberOfThreads) {
 
   io::progressbar((float)std::atomic_load(&progress) / (float)p1Hands.size());
 
+  mpz_class nGames = 0;            // counts total games
+  mpz_class n3KindOccurrences[9];  // counts number of combinations with 0 - 8
+                                   // three of a kind occurences
+  std::fill(n3KindOccurrences, n3KindOccurrences + 9, 0);
+
   // get values form threads
   for (unsigned int i = 0; i < fut.size(); i++) {
     std::array<mpz_class, 10> ret = fut.at(i).get();
@@ -84,30 +85,36 @@ void Proof::compute(unsigned int numberOfThreads) {
 
 std::array<mpz_class, 10> Proof::computeThread(std::vector<Hand> p1HandsPart) {
   HandTree htree;
-  std::array<mpz_class, 10> ret; // index 0 - 8 count n kind occurrences and
-                                 // index 9 counts total number of games
-  unsigned long multi;
+
+  // index 0 - 8 count n kind occurrences and
+  // index 9 counts total number of games
+  std::array<mpz_class, 10> ret;
+
+  unsigned long multi;  // multiplicity of a hand combination
 
   std::fill(ret.begin(), ret.end(), 0);
 
+  // possible hands for player 2 and 3
   std::vector<Hand> p2Hands;
   std::vector<Hand> p3Hands;
 
-  Hand p1p2sum;
+  Hand p1p2sum;  // all cards in the hands of player 1 and 2
 
   unsigned int counter = 0;
   for (auto p1h : p1HandsPart) {
     counter++;
-    if (counter % 10 == 0)
-      std::atomic_fetch_add(&this->progress, 10);
+    // update progressbar data
+    if (counter % 10 == 0) std::atomic_fetch_add(&this->progress, 10);
 
     p2Hands.clear();
     htree.getAllHands(p1h, p2Hands);
 
     for (auto p2h : p2Hands) {
-      for (unsigned int i = 0; i < 8; i++)
-        p1p2sum[i] = p1h[i] + p2h[i];
+      // sum hands of player 1 and 2
+      for (unsigned int i = 0; i < 8; i++) p1p2sum[i] = p1h[i] + p2h[i];
+
       p3Hands.clear();
+
       htree.getAllHands(p1p2sum, p3Hands);
 
       for (auto p3h : p3Hands) {
@@ -125,12 +132,9 @@ unsigned long Proof::calcN3Kind(const Hand &p1h, const Hand &p2h,
                                 const Hand &p3h) {
   unsigned long n3Kind = 0;
   for (unsigned int i = 0; i < 8; i++) {
-    if (p1h[i] >= 3)
-      n3Kind++;
-    if (p2h[i] >= 3)
-      n3Kind++;
-    if (p3h[i] >= 3)
-      n3Kind++;
+    if (p1h[i] >= 3) n3Kind++;
+    if (p2h[i] >= 3) n3Kind++;
+    if (p3h[i] >= 3) n3Kind++;
   }
 
   return n3Kind;
@@ -138,7 +142,7 @@ unsigned long Proof::calcN3Kind(const Hand &p1h, const Hand &p2h,
 
 unsigned long Proof::calcMultiplicity(const Hand &p1h, const Hand &p2h,
                                       const Hand &p3h) {
-  Hand left;
+  Hand left;  // keeps track of the remaining cards
   std::fill(begin(left), end(left), 4);
 
   unsigned long mp = 1;

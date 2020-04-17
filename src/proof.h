@@ -1,14 +1,16 @@
 #ifndef PROOF_H
 #define PROOF_H
-#include "hand_tree.h"
-#include "io.h"
+#include <gmpxx.h>
+
 #include <atomic>
 #include <future>
-#include <gmpxx.h>
 #include <iostream>
 #include <random>
 #include <string>
 #include <thread>
+
+#include "hand_tree.h"
+#include "io.h"
 
 // This class calculates the probabilites for n three of a kind in a game of
 // skat using the following method:
@@ -20,14 +22,14 @@
 // 4. sum everything up
 
 class Proof {
-public:
+ public:
   Proof();
   ~Proof();
   void compute(unsigned int numberOfThreads);
 
-private:
+ private:
   // returns "multiplicity" of hand combination
-  // (how many real games are represented by hand combination)
+  // (how many real games are represented by a combiantion of hands)
   unsigned long calcMultiplicity(const Hand &p1h, const Hand &p2h,
                                  const Hand &p3h);
 
@@ -40,7 +42,8 @@ private:
   // binominal coefficient look up table
   std::array<std::vector<unsigned long>, 5> bncLookup;
 
+  // atomic unsigned int keeping track of the progress
   std::atomic<unsigned int> progress;
 };
 
-#endif // PROOF_H
+#endif  // PROOF_H

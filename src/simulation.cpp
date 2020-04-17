@@ -4,9 +4,11 @@ Simulation::Simulation() {
   std::random_device rd;
   generator = std::mt19937{rd()};
 
+  // initialize cards
   for (unsigned int c = 0; c < 32; c++) {
     cards[c] = c;
   }
+
   std::fill(begin(nKindProt), end(nKindProt), 0);
   games = 0;
 }
@@ -43,16 +45,20 @@ void Simulation::givehands() {
 
 void Simulation::analysehands() {
   int dcounter = 0;
+
+  // s_array counts how many cards of one symbol are in a hand.
+  // As there are 4 cards of each symbol, card % 8
+  // gives 8 residue classes representing the 8 card symbols.
   std::array<unsigned char, 8> s_array;
+
   for (int hand = 0; hand < 3; hand++) {
     std::fill(begin(s_array), end(s_array), 0);
 
     for (int i = 0; i < 10; i++) {
-      s_array[hands[hand][i] / 4]++;
+      s_array[hands[hand][i] % 8]++;
     }
     for (int i = 0; i < 8; i++) {
-      if (s_array[i] >= 3)
-        dcounter++;
+      if (s_array[i] >= 3) dcounter++;
     }
   }
   this->games++;

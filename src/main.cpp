@@ -1,33 +1,36 @@
+#include <iostream>
+
 #include "hand_tree.h"
 #include "proof.h"
 #include "simulation.h"
-#include <iostream>
 
 using namespace std;
 
 void help() {
-  std::string help = "Created by Jon Amos Fehling in 2020\n"
-                     "Usage: skb [Options]\n\n"
-                     "Options:\n"
-                     "  -s       runs the simulation\n"
-                     "  -p       runs the proof\n"
-                     "  -sr x    sets rounds of simulation to x\n"
-                     "  -pf x    sets threads used by proof to x\n";
+  std::string help =
+      "Created by Jon Amos Fehling in 2020\n"
+      "Usage: skb [Options]\n\n"
+      "Options:\n"
+      "  -s       runs the simulation\n"
+      "  -p       runs the proof\n"
+      "  -sr x    sets rounds of simulation to x\n"
+      "  -pt x    sets threads used by proof to x\n";
   std::cout << help;
   exit(-1);
 }
 
 int main(int argc, char *argv[]) {
-
   std::vector<std::string> strArgv(argv + 1, argv + argc);
 
   unsigned int index = 0;
 
+  // set default values
   bool runProof = false;
   bool runSimulation = false;
   unsigned int simulationRounds = 10000000;
   unsigned int proofThreads = 12;
 
+  // evaluate command line input
   while (index < strArgv.size()) {
     if (strArgv[index] == "-s") {
       runSimulation = true;
@@ -45,7 +48,7 @@ int main(int argc, char *argv[]) {
       } catch (...) {
         help();
       }
-    } else if (strArgv[index] == "-pf") {
+    } else if (strArgv[index] == "-pt") {
       if (index + 1 >= strArgv.size()) {
         help();
       }
